@@ -1,7 +1,9 @@
 using UnityEngine;
+using System.Collections;
 
 public class Controller : MonoBehaviour
-{
+{   
+    private 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
