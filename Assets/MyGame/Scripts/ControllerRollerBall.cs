@@ -10,6 +10,7 @@ public class ControllerRollerBall : MonoBehaviour
 	public float jumpHeight;
 
 	private Rigidbody rb;
+	public int count;
 
 	void Start()
 	{
@@ -41,7 +42,8 @@ public class ControllerRollerBall : MonoBehaviour
 		if (other.gameObject.CompareTag("PickUp"))
 		{
 			other.gameObject.SetActive(false);
-			//count++;
+			count++;
+			Debug.Log(count + "tags gesammelt");
 			//SetCountText();
 
 		}
