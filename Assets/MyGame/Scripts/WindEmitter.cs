@@ -4,19 +4,28 @@ using System.Collections;
 public class WindEmitter : MonoBehaviour
 {
     [Header("Wind Einstellungen")]
-    public float minDelay = 2f;          // Mindestzeit zwischen Windstößen
-    public float maxDelay = 6f;          // Maximalzeit zwischen Windstößen
-    public float windForce = 10f;        // Stärke des Windstoßes
-    public float windDuration = 0.5f;    // Wie lange der Wind anhält
-    public float windRange = 10f;        // Reichweite, in der der Player getroffen wird
+    public float minDelay = 2f;
+    public float maxDelay = 6f;
+    public float windForce = 10f;
+    public float windDuration = 0.5f;
+    public float windRange = 10f;
 
     [Header("Referenzen")]
-    public Transform player;             // Player-Objekt, das den Controller hat
+    public Transform player;
+    public ParticleSystem windParticles;   // <–– dein Wind Particle System
 
     private bool isBlowing = false;
+    private ParticleSystem.EmissionModule emission;
 
     void Start()
     {
+        if (windParticles != null)
+            emission = windParticles.emission;
+
+        // Partikel am Anfang aus
+        if (windParticles != null)
+            emission.enabled = false;
+
         StartCoroutine(WindRoutine());
     }
 
@@ -24,11 +33,9 @@ public class WindEmitter : MonoBehaviour
     {
         while (true)
         {
-            // Zufällige Zeit bis zum nächsten Windstoß
             float delay = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(delay);
 
-            // Windstoß erzeugen
             StartCoroutine(BlowWind());
         }
     }
@@ -37,40 +44,48 @@ public class WindEmitter : MonoBehaviour
     {
         if (player == null) yield break;
 
-        // Prüfen, ob der Player in Reichweite ist
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance > windRange) yield break;
 
         isBlowing = true;
 
-        // Richtung vom WindEmitter zum Player (um ihn wegzuschubsen)
+        // Partikel einschalten
+        if (windParticles != null)
+        {
+            emission.enabled = true;
+            windParticles.Play();
+        }
+
         Vector3 dir = (player.position - transform.position).normalized;
 
-        // Den Controller holen
-        Controller playerController = player.GetComponent<Controller>();
         CharacterController cc = player.GetComponent<CharacterController>();
 
-        if (playerController != null && cc != null)
+        float timer = 0f;
+        while (timer < windDuration)
         {
-            float timer = 0f;
-            while (timer < windDuration)
-            {
-                // Den Player direkt verschieben (Schub)
+            if (cc != null)
                 cc.Move(dir * windForce * Time.deltaTime);
-                timer += Time.deltaTime;
-                yield return null;
-            }
+
+            timer += Time.deltaTime;
+            yield return null;
         }
 
         isBlowing = false;
+
+        // Partikel wieder ausschalten
+        if (windParticles != null)
+        {
+            emission.enabled = false;
+            windParticles.Stop();
+        }
     }
 
 #if UNITY_EDITOR
-    // Nur zur besseren Sichtbarkeit in der Szene
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, windRange);
+
         if (isBlowing)
         {
             Gizmos.color = Color.white;
