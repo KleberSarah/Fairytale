@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ControllerRollerBall : MonoBehaviour
 {
@@ -11,12 +12,15 @@ public class ControllerRollerBall : MonoBehaviour
 
 	private Rigidbody rb;
 	public int count;
+	public TMP_Text winText;
+	public TMP_Text countText;
+	public int numPickups;
 
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
-		//SetCountText();
-		//winText.text = "";
+		SetCountText();
+		winText.text = "";
 	}
 
 	void FixedUpdate()
@@ -44,7 +48,7 @@ public class ControllerRollerBall : MonoBehaviour
 			other.gameObject.SetActive(false);
 			count++;
 			Debug.Log(count + "tags gesammelt");
-			//SetCountText();
+			SetCountText();
 
 		}
 
@@ -54,12 +58,12 @@ public class ControllerRollerBall : MonoBehaviour
 		}
 	}
 
-	/*void SetCountText()
+	void SetCountText()
 	{
 		countText.text = "Count: " + count.ToString();
 		if (count >= numPickups)
 		{
 			winText.text = "You win!";
 		}
-	}*/
+	}
 }
