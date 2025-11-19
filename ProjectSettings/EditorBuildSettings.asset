@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyGame/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/MyGame/Scenes/StartScene.unity
+    guid: 89e1bf0dab0bdd8419a19def09c9a6eb
+  - enabled: 1
+    path: Assets/MyGame/Scenes/RollerBall.unity
+    guid: 7034d696fadf39e42b1a0dfe5c55cb0d
+  - enabled: 1
+    path: Assets/MyGame/Scenes/GoWithTheFlow.unity
+    guid: 2483859b8f1b62543b71afce2b7ecaef
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
