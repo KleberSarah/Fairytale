@@ -818,6 +818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467659471}
   - component: {fileID: 467659472}
+  - component: {fileID: 467659473}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -898,6 +899,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &467659473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467659470}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083fe860b16403c4681d830a48a7b653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  sliderValue: 1
+  points: 10
 --- !u!1 &628343430 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2010933487657134838, guid: b556465d8e0773147813ddc46f75abdd, type: 3}
@@ -1333,11 +1348,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &978357038 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1096732872748925162, guid: 8c8bc0dc3fccd9644be0355f33b9b5b5, type: 3}
-  m_PrefabInstance: {fileID: 5522777038816806072}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &997275184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1756,8 +1766,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PointManager
   timeText: {fileID: 806696474}
-  silder: {fileID: 467659472}
-  acorn: {fileID: 978357038}
+  slider: {fileID: 467659472}
+  mySlider: {fileID: 789661302}
+  pointManager: {fileID: 1383819650}
 --- !u!1 &1411004495
 GameObject:
   m_ObjectHideFlags: 0
