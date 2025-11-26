@@ -1,14 +1,16 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
 
 public class PointManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text timeText;
-    [SerializeField] private Slider silder;
-    [SerializeField] private GameObject acorn;
-    private float timeRemaining = 30;
-    private int points;
+    [SerializeField] public Slider silder;
+    private float timeRemaining = 5;
+    public int points;
     
 
     private void Update()
@@ -20,22 +22,24 @@ public class PointManager : MonoBehaviour
         }
         else
         {
-            timeText.text = "0";
+            SceneManager.LoadScene("KoboldScene");
         }
-
-        
     }
 
-    public void AddPoints()
+    public void AddPoints(int amount)
     {
-        silder.value += 0.1f;
+        points += amount;
+        silder.value = 0.1f;
+
+        GameManager.Instance.sliderValue = slider.value;
+        GameManager.Instance.points = points;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Acorn"))
         {
-            AddPoints();
+            AddPoints(1);
             Destroy(other.gameObject);
         }
     }
