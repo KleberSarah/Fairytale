@@ -500,8 +500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28bd5b45cba04be49b3c48302c571598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  destinationPoint: {fileID: 0}
-  mapController: {fileID: 0}
+  destinationPoint: {fileID: 1327892236}
+  mapController: {fileID: 1803128719}
 --- !u!1 &692714330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,7 +1301,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   character: {fileID: 1106731353}
-  characterAnimator: {fileID: 0}
   moveSpeed: 3
   levelStartButton: {fileID: 685446297}
 --- !u!1 &1998160483
