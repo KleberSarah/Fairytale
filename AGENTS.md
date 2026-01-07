@@ -2,7 +2,7 @@
 - Project name: Fairytale
 - Unity version: Unity 6000.2.7f2
 - Active game object:
-  - Name: GameManager
-  - Tag: Untagged
+  - Name: Collectible (1)
+  - Tag: Acorn
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
