@@ -312,7 +312,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2635491523169281504, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
   m_PrefabInstance: {fileID: 347444874523159369}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2045299218}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f14206f70df74bd47aa747452a3d9b6b, type: 3}
@@ -806,7 +806,6 @@ GameObject:
   m_Component:
   - component: {fileID: 467659471}
   - component: {fileID: 467659472}
-  - component: {fileID: 467659473}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -887,20 +886,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &467659473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467659470}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 083fe860b16403c4681d830a48a7b653, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  sliderValue: 1
-  points: 10
 --- !u!1001 &643546131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2462,6 +2447,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06a90d59b5554d84a903dd7f5b8a0865, type: 3}
+--- !u!1 &2045299218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1194948378363124387, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
+  m_PrefabInstance: {fileID: 347444874523159369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2045299220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045299218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083fe860b16403c4681d830a48a7b653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!4 &2098997275 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6706990730893658434, guid: 06a90d59b5554d84a903dd7f5b8a0865, type: 3}
@@ -2672,10 +2674,17 @@ PrefabInstance:
       propertyPath: timeText
       value: 
       objectReference: {fileID: 806696474}
+    - target: {fileID: 2635491523169281504, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
+      propertyPath: lifeSlider
+      value: 
+      objectReference: {fileID: 7157043674397441812, guid: 4d336deaa745ed7478a80df5f9911c87, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1194948378363124387, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2045299220}
   m_SourcePrefab: {fileID: 100100000, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
 --- !u!1001 &464150037424158738
 PrefabInstance:

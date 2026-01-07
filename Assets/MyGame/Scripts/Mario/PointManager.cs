@@ -1,45 +1,68 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using Slider = UnityEngine.UI.Slider;
 
 public class PointManager : MonoBehaviour
 {
+    public static PointManager Instance; // Singleton, damit er überlebt
+
     [SerializeField] private TMP_Text timeText;
-    [SerializeField] public Slider slider;
-    public GameObject mySlider;
+    [SerializeField] private Slider slider;
+
     private float timeRemaining = 10;
-    public static int points;
-    public PointManager pointManager;
+    public int points;
 
+    private bool isGameActive = true; // Steuert, ob die Logik laufen soll
 
-
-    private void Update()
+    private void Awake()
     {
-        if(timeRemaining > 0)
+        // Sicherstellen, dass nur ein PointManager existiert
+        if (Instance == null)
         {
-            timeRemaining -= Time.deltaTime;
-            timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+            Instance = this;
+            transform.SetParent(null); // Wichtig für den Fehler von vorhin!
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            SceneManager.LoadScene("KoboldScene");
+            Destroy(gameObject);
         }
+    }
 
-        DontDestroyOnLoad(mySlider);
-        DontDestroyOnLoad(pointManager);
+    private void Update()
+    {
+        // Wenn wir nicht mehr im "Sammel-Modus" sind, brich hier ab!
+        if (!isGameActive) return;
 
+        if (timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+
+            // UI nur updaten, wenn die Referenzen noch da sind
+            if (timeText != null)
+                timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+        }
+        else
+        {
+            StartKoboldFight();
+        }
+    }
+
+    private void StartKoboldFight()
+    {
+        isGameActive = false; // Stoppt die Update-Logik
+        SceneManager.LoadScene("KoboldScene");
     }
 
     public void AddPoints(int amount)
     {
         points += amount;
-        slider.value += 0.1f;
+
+        // Sicherheitsscheck: Nur UI bedienen, wenn sie existiert
+        if (slider != null)
+        {
+            slider.value += 0.1f;
+        }
     }
-
-    
-
 }
