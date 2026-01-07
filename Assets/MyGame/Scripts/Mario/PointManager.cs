@@ -40,13 +40,6 @@ public class PointManager : MonoBehaviour
         slider.value += 0.1f;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(CompareTag("Player") & other.CompareTag("Acorn"))
-        {
-            AddPoints(1);
-            Destroy(other.gameObject);
-        }
-    }
+    
 
 }
