@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6178514651061162552}
   - component: {fileID: 5044634312874561575}
   - component: {fileID: 3947432159035085201}
+  - component: {fileID: 3990250271746233865}
   m_Layer: 0
   m_Name: windstation_l
   m_TagString: Untagged
@@ -104,10 +105,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece38071599b11e4eaec0a211dba540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindEmitter
-  windPower: 10
-  detectionBoxSize: {x: 10, y: 18, z: 2}
-  boxOffset: {x: 0, y: 0, z: 0}
   windParticles: {fileID: 5957474499941783244}
+  windDirection: {x: 1, y: 0, z: 0}
+  windStrength: 15
+  minActiveTime: 1
+  maxActiveTime: 3
+  minWaitTime: 2
+  maxWaitTime: 5
 --- !u!136 &3947432159035085201
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -130,6 +134,27 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &3990250271746233865
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2282197167067195171}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 15, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &7062341144043763345
 PrefabInstance:

@@ -3,20 +3,21 @@ using System.Collections;
 
 public class WindEmitter : MonoBehaviour
 {
-    [Header("Wind-Timing")]
-    public float minWaitTime = 1.5f;
-    public float maxWaitTime = 4f;
-    public float windDuration = 1.2f;
-
-    [Header("Wind-Stärke & Bereich")]
-    public float windPower = 20f;
-    public Vector3 detectionBoxSize = new Vector3(5f, 5f, 8f);
-    public Vector3 boxOffset = new Vector3(0, 0, 4f);
-
     [Header("Referenzen")]
     public ParticleSystem windParticles;
 
-    private bool isWindActive = false;
+    [Header("Wind Einstellungen")]
+    public Vector3 windDirection = Vector3.right;
+    public float windStrength = 20f;
+
+    [Header("Timing Einstellungen")]
+    public float particleLeadTime = 0.5f; // Zeit, die Partikel brauchen um sichtbar zu sein
+    public float minActiveTime = 1.5f;    // Wie lange die Kraft wirkt
+    public float maxActiveTime = 3f;
+    public float minWaitTime = 2f;        // Pause zwischen Schüssen
+    public float maxWaitTime = 5f;
+
+    private bool isActive = false;
 
     void Start()
     {
@@ -28,52 +29,42 @@ public class WindEmitter : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
-            isWindActive = true;
-            if (windParticles != null) windParticles.Play();
-
-            yield return new WaitForSeconds(windDuration);
-
-            isWindActive = false;
+            // 1. PAUSE (Alles aus)
+            isActive = false;
             if (windParticles != null) windParticles.Stop();
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+
+            // 2. VORLAUF (Partikel starten, aber noch keine Kraft)
+            if (windParticles != null) windParticles.Play();
+            Debug.Log("Partikel starten...");
+            yield return new WaitForSeconds(particleLeadTime);
+
+            // 3. FEUERN (Jetzt ist die Kraft aktiv)
+            isActive = true;
+            Debug.Log("Windkraft aktiv!");
+            yield return new WaitForSeconds(Random.Range(minActiveTime, maxActiveTime));
+
+            // 4. AUSKLINGEN (Optional: Kraft stoppen, bevor Partikel verschwinden)
+            isActive = false;
         }
     }
 
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (isWindActive)
+        if (isActive) ApplyWindForce(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (isActive) ApplyWindForce(other);
+    }
+
+    private void ApplyWindForce(Collider other)
+    {
+        Controller player = other.GetComponent<Controller>();
+        if (player != null)
         {
-            // Bereich im Weltraum berechnen (berücksichtigt Rotation der Station)
-            Vector3 center = transform.TransformPoint(boxOffset);
-            Collider[] hits = Physics.OverlapBox(center, detectionBoxSize / 2, transform.rotation);
-
-            foreach (var hit in hits)
-            {
-                Controller player = hit.GetComponent<Controller>();
-                if (player != null)
-                {
-                    // Wind weht immer in die "Vorwärts"-Richtung der Station (blaue Achse)
-                    Vector3 windDir = transform.forward;
-                    player.transform.position += windDir * windPower * Time.deltaTime;  
-                    Debug.Log("Wind applied to player!");
-                }
-            }
+            player.windEffect = windDirection.normalized * windStrength;
         }
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        // Zeichnet den Windbereich zur Kontrolle in den Editor
-        Matrix4x4 oldMatrix = Gizmos.matrix;
-        Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.color = isWindActive ? Color.red : Color.cyan;
-        Gizmos.DrawWireCube(boxOffset, detectionBoxSize);
-
-        // Gelber Pfeil zeigt die Windrichtung
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(Vector3.zero, Vector3.forward * 2f);
-        Gizmos.matrix = oldMatrix;
-    }
-#endif
 }
