@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MyGame/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/MyGame/Scenes/StartScene.unity
     guid: 89e1bf0dab0bdd8419a19def09c9a6eb
+  - enabled: 1
+    path: Assets/MyGame/Scenes/MapScene.unity
+    guid: b5e0499c22042b0419f1ac5a282959c7
   - enabled: 1
     path: Assets/MyGame/Scenes/RollerBall.unity
     guid: 7034d696fadf39e42b1a0dfe5c55cb0d

@@ -6,7 +6,6 @@ using TMPro;
 
 public class ControllerRollerBall : MonoBehaviour
 {
-
     public float speed;
     public float jumpHeight;
 
@@ -15,11 +14,16 @@ public class ControllerRollerBall : MonoBehaviour
     public TMP_Text winText;
     public TMP_Text countText;
 
-    public TMP_Text timerText;   // <-- NEU: Textfeld für Countdown
-    public float startTime = 10f; // <-- NEU: Startzeit in Sekunden
+    public TMP_Text timerText;
+    public float startTime = 10f;
     private float currentTime;
 
     public int numPickups;
+
+    // NEU: Referenz zum LevelFinisher-Skript (das auf dem "Ziel"-Objekt liegt)
+    public LevelFinisher levelFinisher;
+
+    private bool isGameOver = false; // Damit man nicht gewinnen UND sterben kann
 
     void Start()
     {
@@ -28,16 +32,18 @@ public class ControllerRollerBall : MonoBehaviour
         winText.text = "";
 
         currentTime = startTime;
-        StartCoroutine(Countdown());   // <-- NEU: Countdown starten
+        StartCoroutine(Countdown());
     }
 
     void FixedUpdate()
     {
+        // Bewegung nur erlauben, wenn das Spiel läuft
+        if (isGameOver) return;
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
         rb.AddForce(movement * speed);
 
         if (Input.GetKeyDown("space"))
@@ -49,39 +55,73 @@ public class ControllerRollerBall : MonoBehaviour
 
     IEnumerator Countdown()
     {
-        while (currentTime > 0)
+        while (currentTime > 0 && !isGameOver)
         {
             currentTime -= Time.deltaTime;
-            timerText.text = "Time: " + Mathf.Ceil(currentTime).ToString();
+            // Verhindert negative Zahlen in der Anzeige
+            timerText.text = "Time: " + Mathf.Ceil(Mathf.Max(0, currentTime)).ToString();
             yield return null;
         }
 
-        // Zeit abgelaufen → Neustart
-        SceneManager.LoadScene("RollerBall");
+        // Wenn Zeit abgelaufen und Spiel noch nicht gewonnen
+        if (!isGameOver && currentTime <= 0)
+        {
+            ReloadCurrentLevel();
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (isGameOver) return;
+
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
             count++;
-            Debug.Log(count + "tags gesammelt");
+            // Debug.Log(count + " tags gesammelt"); // Optional auskommentiert
             SetCountText();
         }
 
         if (other.gameObject.CompareTag("Death"))
         {
-            SceneManager.LoadScene("RollerBall");
+            ReloadCurrentLevel();
         }
     }
 
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= numPickups)
+
+        // Gewonnen-Check
+        if (count >= numPickups && !isGameOver)
         {
-            winText.text = "You win!";
+            StartCoroutine(WinSequence());
         }
+    }
+
+    // NEU: Eine Coroutine für den Gewinn-Ablauf
+    IEnumerator WinSequence()
+    {
+        isGameOver = true; // Stoppt Timer und Bewegung
+        winText.text = "You win!";
+
+        // Warte 2 Sekunden, damit der Spieler den Text lesen kann
+        yield return new WaitForSeconds(2f);
+
+        // Rufe das Finisher-Skript auf, um zu speichern und zur Map zu gehen
+        if (levelFinisher != null)
+        {
+            levelFinisher.CompleteLevel();
+        }
+        else
+        {
+            Debug.LogError("LevelFinisher ist im Inspector nicht zugewiesen!");
+        }
+    }
+
+    // Hilfsfunktion: Lädt das aktuelle Level neu (egal wie es heißt)
+    void ReloadCurrentLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

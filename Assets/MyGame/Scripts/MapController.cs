@@ -1,30 +1,52 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic; // Nötig für Listen
+using UnityEngine.SceneManagement;
 
 public class MapController : MonoBehaviour
 {
     public RectTransform character;
     public float moveSpeed = 300f;
-    public Button levelStartButton;
+
+    // NEU: Eine Liste aller Punkte, um den Startpunkt zu finden
+    // Ziehe hier alle deine DestinationButtons (die RectTransforms) rein!
+    // Reihenfolge: Index 0 = Start, Index 1 = Level 1 Ziel, Index 2 = Level 2 Ziel
+    public List<RectTransform> levelPoints;
 
     private bool isMoving = false;
 
     private void Start()
     {
-        levelStartButton.gameObject.SetActive(false);
+        UpdateCharacterPosition();
     }
 
-    public void MoveCharacterTo(RectTransform destination)
+    // Setzt den Charakter sofort an die richtige Stelle basierend auf dem Fortschritt
+    private void UpdateCharacterPosition()
     {
-        if (!isMoving)
+        int currentProgress = PlayerPrefs.GetInt("LevelProgress", 1);
+
+        // Wir berechnen den Index für die Liste.
+        // Wenn Progress = 1 (Neues Spiel), wollen wir Index 0 (Startpunkt).
+        // Wenn Progress = 2 (Level 1 fertig), wollen wir Index 1 (Level 1 Punkt).
+        int listIndex = currentProgress - 1;
+
+        // Sicherheitscheck, damit wir nicht auf einen Index zugreifen, den es nicht gibt
+        if (listIndex >= 0 && listIndex < levelPoints.Count)
         {
-            levelStartButton.gameObject.SetActive(false);
-            StartCoroutine(MoveRoutine(destination));
+            character.anchoredPosition = levelPoints[listIndex].anchoredPosition;
         }
     }
 
-    private IEnumerator MoveRoutine(RectTransform target)
+    public void MoveCharacterTo(RectTransform destination, int sceneIndex)
+    {
+        if (!isMoving)
+        {
+            StartCoroutine(MoveRoutine(destination, sceneIndex));
+        }
+    }
+
+    private IEnumerator MoveRoutine(RectTransform target, int sceneIndex)
     {
         isMoving = true;
 
@@ -35,11 +57,15 @@ public class MapController : MonoBehaviour
                 target.anchoredPosition,
                 moveSpeed * Time.deltaTime
             );
-
             yield return null;
         }
 
+        character.anchoredPosition = target.anchoredPosition;
         isMoving = false;
-        levelStartButton.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.Log("Lade Szene mit Index: " + sceneIndex);
+        SceneManager.LoadScene(sceneIndex);
     }
 }
