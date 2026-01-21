@@ -1,96 +1,97 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class WindEmitter : MonoBehaviour
 {
-    [Header("Wind Einstellungen")]
-    public float minDelay = 2f;
-    public float maxDelay = 6f;
-    public float windForce = 10f;
-    public float windDuration = 0.5f;
-    public float windRange = 10f;
+    [Header("Wind-Timing")]
+    public float minWaitTime = 1.5f;
+    public float maxWaitTime = 4f;
+    public float windDuration = 1.2f;
+
+    [Header("Wind-Stärke & Bereich")]
+    public float windPower = 15f;
+    public float maxDistance = 10f; // Sicherheitshalber: Wie weit reicht der Wind?
+    public Vector3 detectionBoxSize = new Vector3(5f, 5f, 5f);
+    public Vector3 boxOffset = new Vector3(0, 0, 2.5f);
 
     [Header("Referenzen")]
-    public Transform player;
-    public ParticleSystem windParticles;   // <–– dein Wind Particle System
+    public GameObject playerObject; // Ziehe hier dein Spieler-Objekt rein
+    public ParticleSystem windParticles;
 
-    private bool isBlowing = false;
-    private ParticleSystem.EmissionModule emission;
+    private bool isWindActive = false;
 
     void Start()
     {
-        if (windParticles != null)
-            emission = windParticles.emission;
+        if (playerObject == null)
+            Debug.LogError("WINDSTATION: Kein Spieler-Objekt zugewiesen!");
 
-        // Partikel am Anfang aus
         if (windParticles != null)
-            emission.enabled = false;
+            windParticles.Stop();
 
-        StartCoroutine(WindRoutine());
+        StartCoroutine(WindCycle());
     }
 
-    IEnumerator WindRoutine()
+    IEnumerator WindCycle()
     {
         while (true)
         {
-            float delay = Random.Range(minDelay, maxDelay);
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
 
-            StartCoroutine(BlowWind());
+            isWindActive = true;
+            Debug.Log("WIND: Startet jetzt!"); // Schau in die Console!
+            if (windParticles != null) windParticles.Play();
+
+            yield return new WaitForSeconds(windDuration);
+
+            isWindActive = false;
+            Debug.Log("WIND: Ende.");
+            if (windParticles != null) windParticles.Stop();
         }
     }
 
-    IEnumerator BlowWind()
+    void Update()
     {
-        if (player == null) yield break;
-
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance > windRange) yield break;
-
-        isBlowing = true;
-
-        // Partikel einschalten
-        if (windParticles != null)
+        if (isWindActive && playerObject != null)
         {
-            emission.enabled = true;
-            windParticles.Play();
+            if (IsPlayerInZone())
+            {
+                // Verschiebe den Spieler
+                playerObject.transform.position += transform.forward * windPower * Time.deltaTime;
+                Debug.Log("WIND: Ich schiebe den Spieler gerade!");
+            }
         }
+    }
 
-        Vector3 dir = (player.position - transform.position).normalized;
+    bool IsPlayerInZone()
+    {
+        // 1. Einfacher Distanz-Check (Sicherheit)
+        float dist = Vector3.Distance(transform.position, playerObject.transform.position);
+        if (dist > maxDistance) return false;
 
-        CharacterController cc = player.GetComponent<CharacterController>();
+        // 2. Box-Check (Relativ zur Rotation der Station)
+        // Wir wandeln die Welt-Position des Spielers in die lokale Position der Station um
+        Vector3 localPlayerPos = transform.InverseTransformPoint(playerObject.transform.position);
 
-        float timer = 0f;
-        while (timer < windDuration)
-        {
-            if (cc != null)
-                cc.Move(dir * windForce * Time.deltaTime);
+        // Wir prüfen, ob diese lokale Position innerhalb unserer Box (mit Offset) liegt
+        Vector3 boxCenter = boxOffset;
+        bool inX = Mathf.Abs(localPlayerPos.x - boxCenter.x) < detectionBoxSize.x / 2;
+        bool inY = Mathf.Abs(localPlayerPos.y - boxCenter.y) < detectionBoxSize.y / 2;
+        bool inZ = Mathf.Abs(localPlayerPos.z - boxCenter.z) < detectionBoxSize.z / 2;
 
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        isBlowing = false;
-
-        // Partikel wieder ausschalten
-        if (windParticles != null)
-        {
-            emission.enabled = false;
-            windParticles.Stop();
-        }
+        return inX && inY && inZ;
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, windRange);
+        // Zeichne die Box im Editor
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = isWindActive ? Color.red : Color.cyan;
+        Gizmos.DrawWireCube(boxOffset, detectionBoxSize);
 
-        if (isBlowing)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawSphere(transform.position, 0.5f);
-        }
+        // Zeige die Windrichtung (Blauer Pfeil in Unity = transform.forward)
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(Vector3.zero, Vector3.forward * 3f);
     }
 #endif
 }

@@ -10,7 +10,7 @@ public class PointManager : MonoBehaviour
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private Slider slider;
 
-    private float timeRemaining = 10;
+    private float timeRemaining = 30;
     public int points;
 
     private bool isGameActive = true; // Steuert, ob die Logik laufen soll
