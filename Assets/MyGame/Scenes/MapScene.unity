@@ -902,7 +902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DestinationButton
   destinationPoint: {fileID: 1293657630}
   mapController: {fileID: 978565743}
-  sceneIndexToLoad: 3
+  sceneIndexToLoad: 5
   requiredProgress: 3
   lockedColor: {r: 0, g: 0, b: 0, a: 1}
   unlockedColor: {r: 1, g: 0, b: 0, a: 1}

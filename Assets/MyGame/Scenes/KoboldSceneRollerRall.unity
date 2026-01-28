@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b23c7b7bdebd0f45873d33086004622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelFinisher
-  unlockProgress: 3
+  unlockProgress: 2
   mapSceneIndex: 0
 --- !u!224 &1424365293
 RectTransform:

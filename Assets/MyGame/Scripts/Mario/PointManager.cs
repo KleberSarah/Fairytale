@@ -9,6 +9,7 @@ public class PointManager : MonoBehaviour
 
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private Slider slider;
+    public int index;
 
     private float timeRemaining = 30;
     public int points;
@@ -52,7 +53,7 @@ public class PointManager : MonoBehaviour
     private void StartKoboldFight()
     {
         isGameActive = false; // Stoppt die Update-Logik
-        SceneManager.LoadScene("KoboldScene");
+        SceneManager.LoadScene(index);
     }
 
     public void AddPoints(int amount)

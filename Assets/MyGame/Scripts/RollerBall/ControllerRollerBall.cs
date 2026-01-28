@@ -20,19 +20,17 @@ public class ControllerRollerBall : MonoBehaviour
 
     public int numPickups;
 
-    // NEU: Referenz zum LevelFinisher-Skript (das auf dem "Ziel"-Objekt liegt)
-    public LevelFinisher levelFinisher;
+    
 
     private bool isGameOver = false; // Damit man nicht gewinnen UND sterben kann
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        SetCountText();
+        
         winText.text = "";
 
-        currentTime = startTime;
-        StartCoroutine(Countdown());
+      
     }
 
     void FixedUpdate()
@@ -53,34 +51,13 @@ public class ControllerRollerBall : MonoBehaviour
         }
     }
 
-    IEnumerator Countdown()
-    {
-        while (currentTime > 0 && !isGameOver)
-        {
-            currentTime -= Time.deltaTime;
-            // Verhindert negative Zahlen in der Anzeige
-            timerText.text = "Time: " + Mathf.Ceil(Mathf.Max(0, currentTime)).ToString();
-            yield return null;
-        }
-
-        // Wenn Zeit abgelaufen und Spiel noch nicht gewonnen
-        if (!isGameOver && currentTime <= 0)
-        {
-            ReloadCurrentLevel();
-        }
-    }
+   
 
     void OnTriggerEnter(Collider other)
     {
         if (isGameOver) return;
 
-        if (other.gameObject.CompareTag("PickUp"))
-        {
-            other.gameObject.SetActive(false);
-            count++;
-            // Debug.Log(count + " tags gesammelt"); // Optional auskommentiert
-            SetCountText();
-        }
+        
 
         if (other.gameObject.CompareTag("Death"))
         {
@@ -88,16 +65,7 @@ public class ControllerRollerBall : MonoBehaviour
         }
     }
 
-    void SetCountText()
-    {
-        countText.text = "Count: " + count.ToString();
-
-        // Gewonnen-Check
-        if (count >= numPickups && !isGameOver)
-        {
-            StartCoroutine(WinSequence());
-        }
-    }
+    
 
     // NEU: Eine Coroutine für den Gewinn-Ablauf
     IEnumerator WinSequence()
@@ -109,14 +77,7 @@ public class ControllerRollerBall : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         // Rufe das Finisher-Skript auf, um zu speichern und zur Map zu gehen
-        if (levelFinisher != null)
-        {
-            levelFinisher.CompleteLevel();
-        }
-        else
-        {
-            Debug.LogError("LevelFinisher ist im Inspector nicht zugewiesen!");
-        }
+       
     }
 
     // Hilfsfunktion: Lädt das aktuelle Level neu (egal wie es heißt)

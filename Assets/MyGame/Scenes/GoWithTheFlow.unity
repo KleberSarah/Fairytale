@@ -17855,6 +17855,10 @@ PrefabInstance:
       value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 2635491523169281504, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
+      propertyPath: index
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635491523169281504, guid: 95a7a721cfe1e3b40a5594d54de4d562, type: 3}
       propertyPath: slider
       value: 
       objectReference: {fileID: 467659472}
