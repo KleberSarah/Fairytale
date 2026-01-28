@@ -212,7 +212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -524,7 +524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -721,7 +721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -790,7 +790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -966,7 +966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1270,7 +1270,7 @@ GameObject:
   - component: {fileID: 1146304916}
   m_Layer: 5
   m_Name: TimerText
-  m_TagString: Untagged
+  m_TagString: TimeText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1721,7 +1721,7 @@ GameObject:
   - component: {fileID: 1639628784}
   m_Layer: 5
   m_Name: Slider
-  m_TagString: Untagged
+  m_TagString: PointSlider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1939,12 +1939,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   speed: 2
   jumpHeight: 0
-  count: 0
+  numPickups: 4
   winText: {fileID: 321980002}
   countText: {fileID: 177037815}
-  timerText: {fileID: 1146304916}
-  startTime: 10
-  numPickups: 4
 --- !u!135 &1705682626
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2082,7 +2079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2222,7 +2219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2287,7 +2284,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2352,7 +2349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2417,7 +2414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2635,8 +2632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14206f70df74bd47aa747452a3d9b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PointManager
-  timeText: {fileID: 1146304916}
-  slider: {fileID: 1639628784}
   index: 4
   points: 0
 --- !u!1001 &7861275489560322045
@@ -2657,7 +2652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6926989539494501387, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_TagString
-      value: Acorn
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 7740083458350433969, guid: dce8b0cf94666ac4592eca2b49b3d6a1, type: 3}
       propertyPath: m_LocalPosition.x
