@@ -1511,6 +1511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1351453661}
   - component: {fileID: 1351453662}
+  - component: {fileID: 1351453663}
   m_Layer: 0
   m_Name: GameManagerKobold
   m_TagString: Untagged
@@ -1548,6 +1549,21 @@ MonoBehaviour:
   lifeSlider: {fileID: 1424365294}
   mySlider: {fileID: 156535849}
   loseWinText: {fileID: 1455909053}
+  levelFinisher: {fileID: 1351453663}
+--- !u!114 &1351453663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351453660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b23c7b7bdebd0f45873d33086004622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelFinisher
+  unlockProgress: 3
+  mapSceneIndex: 0
 --- !u!224 &1424365293
 RectTransform:
   m_ObjectHideFlags: 0
