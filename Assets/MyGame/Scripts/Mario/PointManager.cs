@@ -7,17 +7,19 @@ public class PointManager : MonoBehaviour
 {
     public static PointManager Instance;
 
+    // Diese Variablen werden NICHT mehr automatisch gefüllt.
+    // Sie warten auf Zuweisung von außen (durch SceneUISetup).
     private TMP_Text timeText;
     private Slider slider;
 
-    public int index; // Index der Szene, die nach Ablauf der Zeit kommt
+    [Header("Einstellungen")]
+    public int index; // Szene, die geladen wird, wenn Zeit abläuft
     private float timeRemaining = 30f;
     public int points;
     private bool isGameActive = true;
 
     private void Awake()
     {
-        // Singleton Pattern
         if (Instance == null)
         {
             Instance = this;
@@ -40,37 +42,48 @@ public class PointManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // Wird IMMER ausgeführt, wenn eine Szene startet (auch beim Reload/Tod)
+    // Wird beim Szenenwechsel aufgerufen
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 1. UI neu finden
-        timeText = Object.FindAnyObjectByType<TMP_Text>();
-        slider = Object.FindAnyObjectByType<Slider>();
-
-        // 2. Slider technisch korrekt einstellen (WICHTIG!)
-        if (slider != null)
-        {
-            slider.minValue = 0;
-            slider.maxValue = 1; // Wir normalisieren den Slider auf 0 bis 1
-        }
-
-        // 3. Spielwerte zurücksetzen
-        ResetManager();
+        // WICHTIG: Hier wird NICHTS mehr gesucht!
+        // Wir setzen nur die Spielwerte zurück.
+        ResetGameValues();
     }
 
-    private void ResetManager()
+    // Diese Methode setzt Punkte und Zeit auf Anfangswert
+    private void ResetGameValues()
     {
         points = 0;
         timeRemaining = 30f;
         isGameActive = true;
 
+        // UI-Referenzen löschen, da sie zur alten Szene gehörten
+        timeText = null;
+        slider = null;
+    }
+
+    // --- SCHNITTSTELLE FÜR MANUELLE ZUWEISUNG ---
+    // Diese Methode muss vom "SceneUISetup"-Skript in der Szene aufgerufen werden
+    public void SetUI(TMP_Text txt, Slider sld)
+    {
+        timeText = txt;
+        slider = sld;
+
+        // Slider sofort initialisieren, wenn vorhanden
         if (slider != null)
         {
-            slider.value = 0;
+            slider.minValue = 0;
+            slider.maxValue = 1;
+            slider.value = 0; // Start bei 0
         }
 
-        Debug.Log("Manager resettet. Punkte: 0");
+        // Text sofort initialisieren
+        if (timeText != null)
+        {
+            timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+        }
     }
+    // --------------------------------------------
 
     private void Update()
     {
@@ -79,8 +92,12 @@ public class PointManager : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
+
+            // Nur updaten, wenn uns jemand einen Text zugewiesen hat
             if (timeText != null)
+            {
                 timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+            }
         }
         else
         {
@@ -98,17 +115,10 @@ public class PointManager : MonoBehaviour
     {
         points += amount;
 
-        // Debugging: Sehen wir im Log, ob Punkte ankommen?
-        Debug.Log("Punkt hinzugefügt. Gesamt: " + points);
-
+        // Nur updaten, wenn uns jemand einen Slider zugewiesen hat
         if (slider != null)
         {
-            // Da MaxValue jetzt sicher 1 ist, füllt 0.1 den Balken um 10%
             slider.value = points * 0.1f;
-        }
-        else
-        {
-            Debug.LogWarning("Kein Slider gefunden!");
         }
     }
 }

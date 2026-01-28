@@ -2598,6 +2598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2029820804}
   - component: {fileID: 2029820805}
+  - component: {fileID: 2029820806}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2634,6 +2635,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PointManager
   index: 4
   points: 0
+--- !u!114 &2029820806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029820803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32a5c3a1faf3db438e7ede6d4e683e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneUISetup
+  myTimerText: {fileID: 1146304916}
+  myPointSlider: {fileID: 1639628784}
 --- !u!1001 &7861275489560322045
 PrefabInstance:
   m_ObjectHideFlags: 0
