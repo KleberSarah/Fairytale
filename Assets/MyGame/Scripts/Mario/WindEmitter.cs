@@ -5,6 +5,7 @@ public class WindEmitter : MonoBehaviour
 {
     [Header("Referenzen")]
     public ParticleSystem windParticles;
+    public Animator anim;
 
     [Header("Wind Einstellungen")]
     public Vector3 windDirection = Vector3.right;
@@ -30,14 +31,17 @@ public class WindEmitter : MonoBehaviour
         while (true)
         {
             // 1. PAUSE (Alles aus)
+            
             isActive = false;
             if (windParticles != null) windParticles.Stop();
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
 
             // 2. VORLAUF (Partikel starten, aber noch keine Kraft)
+            anim.SetBool("windy", true);
             if (windParticles != null) windParticles.Play();
             Debug.Log("Partikel starten...");
             yield return new WaitForSeconds(particleLeadTime);
+            
 
             // 3. FEUERN (Jetzt ist die Kraft aktiv)
             isActive = true;
@@ -46,6 +50,7 @@ public class WindEmitter : MonoBehaviour
 
             // 4. AUSKLINGEN (Optional: Kraft stoppen, bevor Partikel verschwinden)
             isActive = false;
+            anim.SetBool("windy", false);
         }
     }
 
