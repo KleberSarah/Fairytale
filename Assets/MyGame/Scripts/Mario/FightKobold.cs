@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 
@@ -17,6 +18,8 @@ public class FightKobold : MonoBehaviour
     [SerializeField] private TMP_Text loseWinText;
 
     public LevelFinisher levelFinisher;
+    
+    
 
 
 
@@ -31,6 +34,9 @@ public class FightKobold : MonoBehaviour
         mySlider.value = PointManager.Instance.points;
 
     }
+
+    
+    
 
     public void FightPoints()
 
@@ -62,12 +68,12 @@ public class FightKobold : MonoBehaviour
 
         {
 
-            Debug.Log("Kobold hat noch Leben übrig: " + lifeSlider.value);
+            Debug.Log("Kobold hat noch Leben ï¿½brig: " + lifeSlider.value);
 
             loseWinText.gameObject.SetActive(true);
 
             loseWinText.text = "Du hast verloren!";
-            Invoke("ReloadLevel", 2f);
+            Invoke(LevelFinisher.ReloadLevel, 2f);
 
         }
 

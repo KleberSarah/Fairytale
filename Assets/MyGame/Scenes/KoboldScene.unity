@@ -1550,6 +1550,7 @@ MonoBehaviour:
   mySlider: {fileID: 156535849}
   loseWinText: {fileID: 1455909053}
   levelFinisher: {fileID: 1351453663}
+  index: 0
 --- !u!114 &1351453663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1564,6 +1565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelFinisher
   unlockProgress: 3
   mapSceneIndex: 0
+  Levelindex: 2
 --- !u!224 &1424365293
 RectTransform:
   m_ObjectHideFlags: 0
