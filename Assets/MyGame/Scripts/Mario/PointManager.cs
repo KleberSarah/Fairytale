@@ -7,16 +7,17 @@ public class PointManager : MonoBehaviour
 {
     public static PointManager Instance;
 
-    // Diese Variablen werden NICHT mehr automatisch gefüllt.
-    // Sie warten auf Zuweisung von außen (durch SceneUISetup).
-    private TMP_Text timeText;
-    private Slider slider;
+    // Diese Variablen werden NICHT mehr automatisch gefï¿½llt.
+    // Sie warten auf Zuweisung von auï¿½en (durch SceneUISetup).
+    public TMP_Text timeText;
+    public Slider slider;
 
     [Header("Einstellungen")]
-    public int index; // Szene, die geladen wird, wenn Zeit abläuft
-    private float timeRemaining = 30f;
+    public int index; // Szene, die geladen wird, wenn Zeit ablï¿½uft
+    public float timeRemaining = 45f;
     public int points;
     private bool isGameActive = true;
+
 
     private void Awake()
     {
@@ -46,23 +47,25 @@ public class PointManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // WICHTIG: Hier wird NICHTS mehr gesucht!
-        // Wir setzen nur die Spielwerte zurück.
+        // Wir setzen nur die Spielwerte zurï¿½ck.
         ResetGameValues();
+        FindUIElements();
+
     }
 
     // Diese Methode setzt Punkte und Zeit auf Anfangswert
     private void ResetGameValues()
     {
-        points = 0;
-        timeRemaining = 30f;
+        //points = 0;
+        timeRemaining = 45f;
         isGameActive = true;
 
-        // UI-Referenzen löschen, da sie zur alten Szene gehörten
+        // UI-Referenzen lï¿½schen, da sie zur alten Szene gehï¿½rten
         timeText = null;
         slider = null;
     }
 
-    // --- SCHNITTSTELLE FÜR MANUELLE ZUWEISUNG ---
+    // --- SCHNITTSTELLE Fï¿½R MANUELLE ZUWEISUNG ---
     // Diese Methode muss vom "SceneUISetup"-Skript in der Szene aufgerufen werden
     public void SetUI(TMP_Text txt, Slider sld)
     {
@@ -85,7 +88,7 @@ public class PointManager : MonoBehaviour
     }
     // --------------------------------------------
 
-    private void Update()
+    public void Update()
     {
         if (!isGameActive) return;
 
@@ -120,5 +123,23 @@ public class PointManager : MonoBehaviour
         {
             slider.value = points * 0.1f;
         }
+    }
+    private void FindUIElements()
+    {
+   
+    
+    var sliderObj = GameObject.FindWithTag("PointSlider");
+    if (sliderObj != null) slider = sliderObj.GetComponent<Slider>();
+    
+    var textObj = GameObject.FindWithTag("TimeText");
+    if (textObj != null) timeText = textObj.GetComponent<TMP_Text>();
+    
+    // Initialisierung wie in deinem SetUI
+    if (slider != null) {
+        slider.minValue = 0;
+        slider.maxValue = 1;
+        slider.value = 0;
+    }
+
     }
 }
