@@ -34,7 +34,7 @@ public class LevelFinisher : MonoBehaviour
         // 4. Zur�ck zur Map
         SceneManager.LoadScene(mapSceneIndex);
     }
-    private void ReloadLevel()
+    public void ReloadLevel()
     {
         SceneManager.LoadScene(Levelindex);
     }
