@@ -2,7 +2,7 @@
 - Project name: Fairytale
 - Unity version: Unity 6000.2.7f2
 - Active game object:
-  - Name: Main Camera
-  - Tag: MainCamera
+  - Name: Manager
+  - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

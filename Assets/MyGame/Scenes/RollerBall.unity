@@ -3725,6 +3725,7 @@ GameObject:
   - component: {fileID: 2029820804}
   - component: {fileID: 2029820805}
   - component: {fileID: 2029820806}
+  - component: {fileID: 2029820807}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -3778,6 +3779,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneUISetup
   myTimerText: {fileID: 1146304916}
   myPointSlider: {fileID: 1639628784}
+--- !u!114 &2029820807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029820803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dcd30e969fd8454cb5dd1ec3ac74824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  sounds:
+  - name: BackgroundMusic
+    clip: {fileID: 8300000, guid: d8461dff165333d4095018f9d36f183a, type: 3}
+    volume: 1
+    isMusic: 1
+  - name: 
+    clip: {fileID: 0}
+    volume: 0
+    isMusic: 0
 --- !u!1001 &2053016736
 PrefabInstance:
   m_ObjectHideFlags: 0
