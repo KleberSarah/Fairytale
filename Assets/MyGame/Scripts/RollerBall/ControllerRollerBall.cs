@@ -5,162 +5,125 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(SphereCollider))]
 public class ControllerRollerBall : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [Tooltip("Wie stark der Ball beschleunigt")]
-    public float speed = 20f; 
-    [Tooltip("Maximale Rollgeschwindigkeit")]
-    public float maxSpeed = 8f; 
-    [Tooltip("Wie schnell der Ball bremst, wenn man keine Taste drückt (0 = gar nicht, 1 = sofort)")]
-    [Range(0f, 1f)]
-    public float brakingFactor = 0.9f; 
+    public float moveSpeed = 10f;
+    public float airSpeed = 7f;
+    [Tooltip("Wie schnell der Ball ausrollt (höher = stoppt schneller)")]
+    public float deceleration = 5f;
 
     [Header("Jump Settings")]
-    public float jumpForce = 5f;
-    [Tooltip("Wie weit der unsichtbare Strahl nach unten sucht, um den Boden zu erkennen.")]
-    public float groundCheckDistance = 0.6f; 
+    public float jumpForce = 6f;
+    public float groundCheckDistance = 0.6f;
 
     private Rigidbody rb;
-    private SphereCollider sphereCollider;
-    private float moveHorizontal;
-    private float moveVertical;
-    private bool jumpRequested = false;
-
-    [Header("Game Logic")]
-    public int numPickups; 
-    private int count;     
+    private Camera mainCamera;
     private bool isGameOver = false;
 
-    [Header("UI References (Lokal)")]
+    [Header("UI References")]
     public TMP_Text winText;
     public TMP_Text countText;
+    private int count;
+    public int numPickups;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        sphereCollider = GetComponent<SphereCollider>();
-
-        // Damit der Ball nicht ewig weiterrollt, wenn er anstößt
-        rb.maxAngularVelocity = 20f; 
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        mainCamera = Camera.main;
 
         if (winText != null) winText.text = "";
         UpdateCountText();
     }
 
-    // Input IMMER in Update() abfragen, sonst werden Tastendrücke verschluckt!
     void Update()
     {
         if (isGameOver) return;
 
-        // GetAxisRaw gibt direkt -1, 0 oder 1 zurück (kein schwammiges Beschleunigen)
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
-        moveVertical = Input.GetAxisRaw("Vertical");
-
-        // Sprung anfragen
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            jumpRequested = true;
+            Jump();
         }
     }
 
-    // Physik IMMER in FixedUpdate() anwenden
     void FixedUpdate()
     {
         if (isGameOver) return;
 
-        // 1. Bewegung anwenden
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical).normalized;
-        rb.AddForce(movement * speed);
+        MoveBall();
+    }
 
-        // 2. Maximalgeschwindigkeit drosseln (nur X und Z Achse, damit Fallen normal funktioniert)
-        Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        if (flatVelocity.magnitude > maxSpeed)
+    void MoveBall()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 camForward = mainCamera.transform.forward;
+        Vector3 camRight = mainCamera.transform.right;
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDir = (camForward * v + camRight * h).normalized;
+        float targetSpeed = IsGrounded() ? moveSpeed : airSpeed;
+
+        // Aktuelle horizontale Geschwindigkeit extrahieren
+        Vector3 currentHorizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+
+        if (moveDir.magnitude > 0.1f)
         {
-            Vector3 limitedVelocity = flatVelocity.normalized * maxSpeed;
-            rb.linearVelocity = new Vector3(limitedVelocity.x, rb.linearVelocity.y, limitedVelocity.z);
+            // BEIM DRÜCKEN: Sofortige Geschwindigkeit in die gewünschte Richtung
+            rb.linearVelocity = new Vector3(moveDir.x * targetSpeed, rb.linearVelocity.y, moveDir.z * targetSpeed);
+
+            // Visuelles Rollen
+            rb.angularVelocity = new Vector3(moveDir.z * targetSpeed, 0, -moveDir.x * targetSpeed);
         }
-
-        // 3. Bremsen, wenn keine Taste gedrückt wird
-        if (movement.magnitude == 0)
+        else
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x * brakingFactor, rb.linearVelocity.y, rb.linearVelocity.z * brakingFactor);
-        }
+            // BEIM LOSLASSEN: Wir bremsen die Geschwindigkeit weich ab (Lerp)
+            // Time.fixedDeltaTime sorgt dafür, dass das Bremsen unabhängig von der Framerate ist
+            Vector3 lerpedVelocity = Vector3.Lerp(currentHorizontalVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
 
-        // 4. Springen
-        if (jumpRequested)
-        {
-            // Setzt vorherige vertikale Kräfte zurück, für knackigere Sprünge
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); 
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            jumpRequested = false;
+            rb.linearVelocity = new Vector3(lerpedVelocity.x, rb.linearVelocity.y, lerpedVelocity.z);
+
+            // Auch das Rollen (Rotation) langsam stoppen
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
         }
     }
 
-    // Prüft mittels Raycast (unsichtbarer Laserstrahl nach unten), ob wir den Boden berühren
+    void Jump()
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
     private bool IsGrounded()
     {
-        // Startet in der Mitte des Balls und schießt einen Strahl nach unten. 
-        // Die Distanz sollte minimal größer sein als der Radius des Balls (z.B. Radius 0.5 + 0.1 = 0.6)
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
     }
 
+    // --- Standard Logik ---
     void OnTriggerEnter(Collider other)
     {
-        if (isGameOver) return;
-
-        // --- 1. PICKUP LOGIK ---
-        if (other.gameObject.CompareTag("PickUp"))
+        if (other.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
             count++;
             UpdateCountText();
-
-            if (PointManager.Instance != null)
-            {
-                PointManager.Instance.AddPoints(1);
-            }
-            else
-            {
-                Debug.LogError("ACHTUNG: Kein PointManager in der Szene gefunden!");
-            }
-
-            if (count >= numPickups)
-            {
-                StartCoroutine(WinSequence());
-            }
+            if (count >= numPickups) StartCoroutine(WinSequence());
         }
-
-        // --- 2. TOD LOGIK ---
-        if (other.gameObject.CompareTag("Death"))
-        {
-            ReloadCurrentLevel();
-        }
+        if (other.CompareTag("Death")) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    void UpdateCountText()
-    {
-        if (countText != null)
-        {
-            countText.text = "Count: " + count.ToString();
-        }
-    }
+    void UpdateCountText() => countText.text = "Count: " + count;
 
     IEnumerator WinSequence()
     {
         isGameOver = true;
-        
-        // Ball sofort stoppen bei Sieg
         rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-
-        if (winText != null) winText.text = "You win!";
+        winText.text = "You win!";
         yield return new WaitForSeconds(2f);
-    }
-
-    void ReloadCurrentLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
