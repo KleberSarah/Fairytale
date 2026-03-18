@@ -56,7 +56,7 @@ public class PointManager : MonoBehaviour
     // Diese Methode setzt Punkte und Zeit auf Anfangswert
     private void ResetGameValues()
     {
-        //points = 0;
+        points = 0;
         timeRemaining = 45f;
         isGameActive = true;
 
@@ -112,6 +112,7 @@ public class PointManager : MonoBehaviour
     {
         isGameActive = false;
         SceneManager.LoadScene(index);
+        
     }
 
     public void AddPoints(int amount)

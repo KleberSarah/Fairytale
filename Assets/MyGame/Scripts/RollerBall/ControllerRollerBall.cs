@@ -4,16 +4,33 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider))]
 public class ControllerRollerBall : MonoBehaviour
 {
-    [Header("Movement")]
-    public float speed = 10f;
-    public float jumpHeight = 5f;
+    [Header("Movement Settings")]
+    [Tooltip("Wie stark der Ball beschleunigt")]
+    public float speed = 20f; 
+    [Tooltip("Maximale Rollgeschwindigkeit")]
+    public float maxSpeed = 8f; 
+    [Tooltip("Wie schnell der Ball bremst, wenn man keine Taste drückt (0 = gar nicht, 1 = sofort)")]
+    [Range(0f, 1f)]
+    public float brakingFactor = 0.9f; 
+
+    [Header("Jump Settings")]
+    public float jumpForce = 5f;
+    [Tooltip("Wie weit der unsichtbare Strahl nach unten sucht, um den Boden zu erkennen.")]
+    public float groundCheckDistance = 0.6f; 
+
     private Rigidbody rb;
+    private SphereCollider sphereCollider;
+    private float moveHorizontal;
+    private float moveVertical;
+    private bool jumpRequested = false;
 
     [Header("Game Logic")]
-    public int numPickups; // Wie viele Pickups gibt es insgesamt?
-    private int count;     // Eigener Zähler für Win-Condition
+    public int numPickups; 
+    private int count;     
     private bool isGameOver = false;
 
     [Header("UI References (Lokal)")]
@@ -23,27 +40,70 @@ public class ControllerRollerBall : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        sphereCollider = GetComponent<SphereCollider>();
+
+        // Damit der Ball nicht ewig weiterrollt, wenn er anstößt
+        rb.maxAngularVelocity = 20f; 
 
         if (winText != null) winText.text = "";
         UpdateCountText();
     }
 
+    // Input IMMER in Update() abfragen, sonst werden Tastendrücke verschluckt!
+    void Update()
+    {
+        if (isGameOver) return;
+
+        // GetAxisRaw gibt direkt -1, 0 oder 1 zurück (kein schwammiges Beschleunigen)
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxisRaw("Vertical");
+
+        // Sprung anfragen
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            jumpRequested = true;
+        }
+    }
+
+    // Physik IMMER in FixedUpdate() anwenden
     void FixedUpdate()
     {
         if (isGameOver) return;
 
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        // 1. Bewegung anwenden
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical).normalized;
         rb.AddForce(movement * speed);
 
-        // Verbesserte Sprunglogik
-        if (Input.GetButtonDown("Jump")) // Standard ist Leertaste
+        // 2. Maximalgeschwindigkeit drosseln (nur X und Z Achse, damit Fallen normal funktioniert)
+        Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        if (flatVelocity.magnitude > maxSpeed)
         {
-            // ForceMode.Impulse ist besser für knackiges Springen
-            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            Vector3 limitedVelocity = flatVelocity.normalized * maxSpeed;
+            rb.linearVelocity = new Vector3(limitedVelocity.x, rb.linearVelocity.y, limitedVelocity.z);
         }
+
+        // 3. Bremsen, wenn keine Taste gedrückt wird
+        if (movement.magnitude == 0)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x * brakingFactor, rb.linearVelocity.y, rb.linearVelocity.z * brakingFactor);
+        }
+
+        // 4. Springen
+        if (jumpRequested)
+        {
+            // Setzt vorherige vertikale Kräfte zurück, für knackigere Sprünge
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); 
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            jumpRequested = false;
+        }
+    }
+
+    // Prüft mittels Raycast (unsichtbarer Laserstrahl nach unten), ob wir den Boden berühren
+    private bool IsGrounded()
+    {
+        // Startet in der Mitte des Balls und schießt einen Strahl nach unten. 
+        // Die Distanz sollte minimal größer sein als der Radius des Balls (z.B. Radius 0.5 + 0.1 = 0.6)
+        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
     }
 
     void OnTriggerEnter(Collider other)
@@ -54,12 +114,9 @@ public class ControllerRollerBall : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-
-            // Lokalen Zähler erhöhen
             count++;
             UpdateCountText();
 
-            // GLOBALEN Manager informieren (für den Slider!)
             if (PointManager.Instance != null)
             {
                 PointManager.Instance.AddPoints(1);
@@ -69,7 +126,6 @@ public class ControllerRollerBall : MonoBehaviour
                 Debug.LogError("ACHTUNG: Kein PointManager in der Szene gefunden!");
             }
 
-            // Win Condition prüfen
             if (count >= numPickups)
             {
                 StartCoroutine(WinSequence());
@@ -77,7 +133,6 @@ public class ControllerRollerBall : MonoBehaviour
         }
 
         // --- 2. TOD LOGIK ---
-        // Stelle sicher, dass deine Fallen den Tag "Death" haben!
         if (other.gameObject.CompareTag("Death"))
         {
             ReloadCurrentLevel();
@@ -95,18 +150,17 @@ public class ControllerRollerBall : MonoBehaviour
     IEnumerator WinSequence()
     {
         isGameOver = true;
+        
+        // Ball sofort stoppen bei Sieg
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
         if (winText != null) winText.text = "You win!";
-
-        // Kurze Pause zum Lesen
         yield return new WaitForSeconds(2f);
-
-        // Hier ggf. nächstes Level laden
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     void ReloadCurrentLevel()
     {
-        // Lädt die Szene neu. Der PointManager bemerkt das und resettet sich selbst.
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
