@@ -2783,7 +2783,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   speed: 2
-  jumpHeight: 0
+  maxSpeed: 10
+  brakingFactor: 0.149
+  jumpForce: 5
+  groundCheckDistance: 0.6
   numPickups: 15
   winText: {fileID: 321980002}
   countText: {fileID: 177037815}
