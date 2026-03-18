@@ -2468,7 +2468,7 @@ Transform:
   m_GameObject: {fileID: 1612328441}
   serializedVersion: 2
   m_LocalRotation: {x: 0.16309263, y: -0.4546297, z: 0.085081615, w: 0.87147796}
-  m_LocalPosition: {x: 39.4, y: -1.7, z: -78.2}
+  m_LocalPosition: {x: 40.8, y: -1.07, z: -77.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2531,7 +2531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   target: {fileID: 1705682629}
-  offset: {x: 4.9, y: 3.7, z: -3.6}
+  offset: {x: 6.35, y: 4.33, z: -4.48}
 --- !u!1 &1639628782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,14 +2760,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 005eb44a2b80cae4992d6e8a29ace3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  speed: 2
-  maxSpeed: 10
-  brakingFactor: 0.576
+  moveSpeed: 15
+  airSpeed: 7
+  deceleration: 7
   jumpForce: 5
   groundCheckDistance: 0.6
-  numPickups: 15
   winText: {fileID: 321980002}
   countText: {fileID: 177037815}
+  numPickups: 15
 --- !u!135 &1705682626
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3531,15 +3531,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3033035180685388460, guid: f718a10845157ee4da4f4604313f78e8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -134.8
+      value: -129.3
       objectReference: {fileID: 0}
     - target: {fileID: 3033035180685388460, guid: f718a10845157ee4da4f4604313f78e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 3033035180685388460, guid: f718a10845157ee4da4f4604313f78e8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 105.7
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 3033035180685388460, guid: f718a10845157ee4da4f4604313f78e8, type: 3}
       propertyPath: m_LocalRotation.w
