@@ -76,6 +76,7 @@ public class FightKobold : MonoBehaviour
 
         
             levelFinisher.ReloadLevel();
+    
             
 
         }
