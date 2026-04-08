@@ -38,6 +38,9 @@ public class FightKobold : MonoBehaviour
         // 1. Objekt erzeugen an der Position der Fee
         GameObject projectile = Instantiate(attackObject, fairyTransform.position, Quaternion.identity);
 
+
+        AudioManager.Instance.Play("Spell");
+
         // 2. Objekt zum Kobold bewegen
         while (Vector3.Distance(projectile.transform.position, koboldTransform.position) > 0.2f)
         {
