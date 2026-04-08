@@ -7381,8 +7381,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelFinisher
   unlockProgress: 2
-  mapSceneIndex: 0
-  Levelindex: 1
+  mapSceneIndex: 1
+  Levelindex: 2
 --- !u!114 &2131651205
 MonoBehaviour:
   m_ObjectHideFlags: 0

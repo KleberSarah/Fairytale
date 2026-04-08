@@ -254,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DestinationButton
   destinationPoint: {fileID: 309785681}
   mapController: {fileID: 978565743}
-  sceneIndexToLoad: 2
+  sceneIndexToLoad: 3
   requiredProgress: 2
   lockedColor: {r: 0.9169811, g: 0.9169811, b: 0.9169811, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -953,7 +953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DestinationButton
   destinationPoint: {fileID: 1293657630}
   mapController: {fileID: 978565743}
-  sceneIndexToLoad: 5
+  sceneIndexToLoad: 6
   requiredProgress: 3
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1092,7 +1092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DestinationButton
   destinationPoint: {fileID: 1327892236}
   mapController: {fileID: 978565743}
-  sceneIndexToLoad: 1
+  sceneIndexToLoad: 2
   requiredProgress: 0
   lockedColor: {r: 0.4943396, g: 0.4943396, b: 0.4943396, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}

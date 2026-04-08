@@ -761,7 +761,7 @@ MonoBehaviour:
   letterRect: {fileID: 1140525462}
   scrollSpeed: 30
   endYPosition: 500
-  mapSceneIndex: 0
+  mapSceneIndex: 1
 --- !u!1 &1992629892
 GameObject:
   m_ObjectHideFlags: 0

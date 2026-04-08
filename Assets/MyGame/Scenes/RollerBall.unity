@@ -746,7 +746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PointManager
   timeText: {fileID: 1146304916}
   slider: {fileID: 1639628784}
-  bossSceneIndex: 4
+  bossSceneIndex: 5
   timeRemaining: 120
 --- !u!1001 &556625770
 PrefabInstance:
