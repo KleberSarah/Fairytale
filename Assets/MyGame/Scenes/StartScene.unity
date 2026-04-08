@@ -904,7 +904,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dcd30e969fd8454cb5dd1ec3ac74824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  sounds: []
+  sounds:
+  - name: Fairytale
+    clip: {fileID: 8300000, guid: 89196fe8da9cdc94d8736dcfc443badc, type: 3}
+    volume: 0
+    isMusic: 1
 --- !u!4 &1460381724
 Transform:
   m_ObjectHideFlags: 0

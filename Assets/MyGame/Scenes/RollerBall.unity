@@ -349,7 +349,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dcd30e969fd8454cb5dd1ec3ac74824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  sounds: []
+  sounds:
+  - name: "St\xFCck3"
+    clip: {fileID: 8300000, guid: 236754fcdb0fda946bdc0ed578a9e6b3, type: 3}
+    volume: 0
+    isMusic: 1
 --- !u!1001 &190324412
 PrefabInstance:
   m_ObjectHideFlags: 0
