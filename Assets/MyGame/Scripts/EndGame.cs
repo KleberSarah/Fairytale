@@ -9,6 +9,6 @@ public class EndGame : MonoBehaviour
 
     public void Menu()
     {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }
