@@ -26,6 +26,7 @@ public class ControllerRollerBall : MonoBehaviour
     public TMP_Text countText;
     private int count;
     public int numPickups;
+    public PointManager pointManager;
 
     void Start()
     {
@@ -113,6 +114,13 @@ public class ControllerRollerBall : MonoBehaviour
             
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+         if (other.CompareTag("Finish")) 
+        {
+           pointManager.GoToBossFight();
+        }
+
+
     }
 
     void UpdateCountText() => countText.text = "Count: " + count;

@@ -54,7 +54,7 @@ public class PointManager : MonoBehaviour
         }
     }
 
-    private void GoToBossFight()
+    public void GoToBossFight()
     {
         isGameActive = false;
         
