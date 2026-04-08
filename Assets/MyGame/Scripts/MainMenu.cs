@@ -7,8 +7,12 @@ public class MainMenu : MonoBehaviour
 
     public void OnStartGameButton()
     {
-        // Alles auf Anfang setzen (1)
+        // Level Fortschritt zurücksetzen
         PlayerPrefs.SetInt("LevelProgress", 1);
+        
+        // SICHERHEIT: Den Score beim Start eines GANZ NEUEN Spiels auf 0 setzen
+        PlayerPrefs.SetInt("Score", 0); 
+        
         PlayerPrefs.Save();
 
         SceneManager.LoadScene(mapSceneIndex);

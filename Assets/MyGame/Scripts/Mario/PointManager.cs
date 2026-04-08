@@ -5,153 +5,63 @@ using UnityEngine.UI;
 
 public class PointManager : MonoBehaviour
 {
-    public static PointManager Instance;
-
+    [Header("UI Elemente")]
     public TMP_Text timeText;
     public Slider slider;
 
     [Header("Einstellungen")]
-    public int index; 
+    public int bossSceneIndex; // Die Szene für den Kobold
     public float timeRemaining = 45f;
-    public int points;
     
+    private int points = 0;
     private bool isGameActive = true;
 
-    private bool keepPointsForNextScene = false;
-
-
-    public void Awake()
+    void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    public void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    // Wird beim Szenenwechsel aufgerufen
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        
-        if (keepPointsForNextScene)
-        {
-            
-            keepPointsForNextScene = false;
-            
-            // Nur UI-Elemente neu verknüpfen
-            FindUIElements();
-        }
-        else
-        {
-            // Normaler Level-Start oder Tod (Reload): Alles auf 0 setzen
-            ResetGameValues();
-            FindUIElements();
-        }
-    }
-
-    // Diese Methode setzt Punkte und Zeit auf Anfangswert
-    public void ResetGameValues()
-    {
-        points = 0;
-        timeRemaining = 45f;
-        isGameActive = true;
-
-        // UI-Referenzen löschen, da sie zur alten Szene gehörten
-        timeText = null;
-        slider = null;
-    }
-
-    // --- SCHNITTSTELLE FÜR MANUELLE ZUWEISUNG ---
-    public void SetUI(TMP_Text txt, Slider sld)
-    {
-        timeText = txt;
-        slider = sld;
-
-        // Slider sofort initialisieren, wenn vorhanden
-        if (slider != null)
+        // UI initialisieren
+        if (slider != null) 
         {
             slider.minValue = 0;
             slider.maxValue = 1;
-            // ANPASSUNG: Hier den aktuellen Punktestand setzen statt hart auf 0
-            slider.value = points * 0.1f; 
-        }
-
-        // Text sofort initialisieren
-        if (timeText != null)
-        {
-            timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+            slider.value = 0;
         }
     }
-    // --------------------------------------------
 
-    public void Update()
+    void Update()
     {
         if (!isGameActive) return;
 
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-
-            // Nur updaten, wenn uns jemand einen Text zugewiesen hat
-            if (timeText != null)
+            if (timeText != null) 
             {
                 timeText.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
             }
         }
         else
         {
-            StartKoboldFight();
+            GoToBossFight();
         }
-    }
-    
-
-    public void StartKoboldFight()
-    {
-        isGameActive = false;
-        keepPointsForNextScene = true; 
-        
-        SceneManager.LoadScene(index);
     }
 
     public void AddPoints(int amount)
     {
         points += amount;
-
-        if (slider != null)
+        if (slider != null) 
         {
             slider.value = points * 0.1f;
         }
     }
 
-    public void FindUIElements()
+    private void GoToBossFight()
     {
-        var sliderObj = GameObject.FindWithTag("PointSlider");
-        if (sliderObj != null) slider = sliderObj.GetComponent<Slider>();
+        isGameActive = false;
         
-        var textObj = GameObject.FindWithTag("TimeText");
-        if (textObj != null) timeText = textObj.GetComponent<TMP_Text>();
+        // TAFEL-LOGIK: Punkte für die nächste Szene in den PlayerPrefs speichern!
+        PlayerPrefs.SetInt("Score", points);
+        PlayerPrefs.Save();
         
-        // Initialisierung
-        if (slider != null) 
-        {
-            slider.minValue = 0;
-            slider.maxValue = 1;
-            slider.value = points * 0.1f;
-        }
+        SceneManager.LoadScene(bossSceneIndex);
     }
 }

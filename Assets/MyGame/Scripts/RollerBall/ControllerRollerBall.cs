@@ -26,8 +26,6 @@ public class ControllerRollerBall : MonoBehaviour
     public TMP_Text countText;
     private int count;
     public int numPickups;
-    public PointManager pointManager;
-
 
     void Start()
     {
@@ -48,7 +46,6 @@ public class ControllerRollerBall : MonoBehaviour
             Jump();
         }
     }
-
 
     void FixedUpdate()
     {
@@ -72,26 +69,17 @@ public class ControllerRollerBall : MonoBehaviour
         Vector3 moveDir = (camForward * v + camRight * h).normalized;
         float targetSpeed = IsGrounded() ? moveSpeed : airSpeed;
 
-        // Aktuelle horizontale Geschwindigkeit extrahieren
         Vector3 currentHorizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
         if (moveDir.magnitude > 0.1f)
         {
-            // BEIM DRÜCKEN: Sofortige Geschwindigkeit in die gewünschte Richtung
             rb.linearVelocity = new Vector3(moveDir.x * targetSpeed, rb.linearVelocity.y, moveDir.z * targetSpeed);
-
-            // Visuelles Rollen
             rb.angularVelocity = new Vector3(moveDir.z * targetSpeed, 0, -moveDir.x * targetSpeed);
         }
         else
         {
-            // BEIM LOSLASSEN: Wir bremsen die Geschwindigkeit weich ab (Lerp)
-            // Time.fixedDeltaTime sorgt dafür, dass das Bremsen unabhängig von der Framerate ist
             Vector3 lerpedVelocity = Vector3.Lerp(currentHorizontalVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
-
             rb.linearVelocity = new Vector3(lerpedVelocity.x, rb.linearVelocity.y, lerpedVelocity.z);
-
-            // Auch das Rollen (Rotation) langsam stoppen
             rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
         }
     }
@@ -107,7 +95,6 @@ public class ControllerRollerBall : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
     }
 
-    // --- Standard Logik ---
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PickUp"))
@@ -117,13 +104,14 @@ public class ControllerRollerBall : MonoBehaviour
             UpdateCountText();
             if (count >= numPickups) StartCoroutine(WinSequence());
         }
-        if (other.CompareTag("Death")) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-         if (other.CompareTag("Finish"))
+        
+        if (other.CompareTag("Death")) 
         {
-            pointManager.StartKoboldFight();
+            // TAFEL-LOGIK: Death -> Score = 0
+            PlayerPrefs.SetInt("Score", 0);
+            PlayerPrefs.Save();
             
-            // Führe hier deinen Code aus (z.B. Tür öffnen, explodieren)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
