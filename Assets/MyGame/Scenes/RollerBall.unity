@@ -354,6 +354,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 236754fcdb0fda946bdc0ed578a9e6b3, type: 3}
     volume: 0
     isMusic: 1
+  - name: Rolling
+    clip: {fileID: 8300000, guid: 1351ec8c768ea1341b8b7cfbc18ec088, type: 3}
+    volume: 0
+    isMusic: 1
+  - name: PickUp
+    clip: {fileID: 8300000, guid: 9f2496039df07e64fbe819852eb29c8e, type: 3}
+    volume: 0
+    isMusic: 1
 --- !u!1001 &190324412
 PrefabInstance:
   m_ObjectHideFlags: 0
