@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyGame/Scenes/Finish.unity
     guid: f14f88018e57b3f43a8cbd358d0bd000
+  - enabled: 1
+    path: Assets/MyGame/Scenes/Backstory.unity
+    guid: af5e7d57b0080a548a8c0d910da06474
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
