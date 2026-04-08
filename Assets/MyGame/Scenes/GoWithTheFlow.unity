@@ -491,22 +491,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   sounds:
-  - name: Flattern
-    clip: {fileID: 8300000, guid: e6fb0227620443341b1340647e14751d, type: 3}
-    volume: 0
-    isMusic: 0
   - name: Musik
     clip: {fileID: 8300000, guid: 236754fcdb0fda946bdc0ed578a9e6b3, type: 3}
-    volume: 0
+    volume: 0.799
     isMusic: 1
+    loop: 0
   - name: Wind
     clip: {fileID: 8300000, guid: fa5610ceb6c129d4e912ab5499a83b86, type: 3}
-    volume: 0
-    isMusic: 1
-  - name: PickUp
+    volume: 0.084
+    isMusic: 0
+    loop: 1
+  - name: Collect
     clip: {fileID: 8300000, guid: 9f2496039df07e64fbe819852eb29c8e, type: 3}
-    volume: 0
-    isMusic: 1
+    volume: 0.491
+    isMusic: 0
+    loop: 0
 --- !u!1 &41980766 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -782130981332443708, guid: dcfd75a3a6adfb34cb2b1e7ff6160547, type: 3}

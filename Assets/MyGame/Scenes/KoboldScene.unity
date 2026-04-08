@@ -841,10 +841,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   sounds:
-  - name: TrollMusic
+  - name: Musik
     clip: {fileID: 8300000, guid: 6c9df469759fdbb408420e7f36462331, type: 3}
-    volume: 0
+    volume: 0.762
     isMusic: 1
+    loop: 0
+  - name: Spell
+    clip: {fileID: 8300000, guid: f06d01b7d18ecb24689544327e8f41d7, type: 3}
+    volume: 0.435
+    isMusic: 0
+    loop: 0
 --- !u!1 &736719202
 GameObject:
   m_ObjectHideFlags: 0

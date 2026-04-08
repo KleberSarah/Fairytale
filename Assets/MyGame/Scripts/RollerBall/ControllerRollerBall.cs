@@ -76,6 +76,7 @@ public class ControllerRollerBall : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(moveDir.x * targetSpeed, rb.linearVelocity.y, moveDir.z * targetSpeed);
             rb.angularVelocity = new Vector3(moveDir.z * targetSpeed, 0, -moveDir.x * targetSpeed);
+            AudioManager.Instance.Play("Rolling");
         }
         else
         {

@@ -6,6 +6,7 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            AudioManager.Instance.Play("Collect");
             // Sucht den lokalen Manager in der Szene und gibt ihm den Punkt
             PointManager manager = Object.FindFirstObjectByType<PointManager>();
             if (manager != null)

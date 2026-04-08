@@ -8,10 +8,11 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class SoundSlot
     {
-        public string name;      // Der Name, mit dem du den Sound aufrufst
-        public AudioClip clip;   // Die Audio-Datei
+        public string name;
+        public AudioClip clip;
         [Range(0f, 1f)] public float volume = 1f;
-        public bool isMusic = false; // Wenn wahr, wird es geloopt
+        public bool isMusic = false;
+        public bool loop = false; // NEU: Damit auch SFX loopen können
     }
 
     [Header("Deine Sound Liste")]
@@ -20,26 +21,26 @@ public class AudioManager : MonoBehaviour
     private AudioSource musicSource;
     private List<AudioSource> sfxSources = new List<AudioSource>();
 
-    void Start()
-    {
-        // Ersetze "BackgroundMusic" durch den exakten Namen, 
-        // den du im Inspector in der Liste eingetragen hast!
-        Play("BackgroundMusic");
-    }
-
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else { Destroy(gameObject); return; }
 
-        // Musik-Quelle vorbereiten
+        // Musik-Quelle (für den Haupt-Track)
         musicSource = gameObject.AddComponent<AudioSource>();
 
-        // Ein paar SFX-Quellen vorbereiten (Pool)
-        for (int i = 0; i < 5; i++)
+        // SFX-Pool (für alles, was gleichzeitig klingen soll)
+        for (int i = 0; i < 10; i++) // Auf 10 erhöht für mehr Gleichzeitigkeit
         {
             sfxSources.Add(gameObject.AddComponent<AudioSource>());
         }
+    }
+
+    void Start()
+    {
+        // Beispiel-Aufruf
+        Play("Musik");
+        Play("Wind");
     }
 
     public void Play(string soundName)
@@ -48,12 +49,13 @@ public class AudioManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.LogWarning("Sound " + soundName + " wurde nicht in der Liste gefunden!");
+            Debug.LogWarning("Sound '" + soundName + "' nicht gefunden!");
             return;
         }
 
         if (s.isMusic)
         {
+            // Musik überschreibt sich immer selbst (nur 1 Track gleichzeitig)
             musicSource.clip = s.clip;
             musicSource.volume = s.volume;
             musicSource.loop = true;
@@ -61,12 +63,15 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            // Suche eine freie Quelle für den Effekt
+            // SFX suchen eine freie Quelle im Pool
             AudioSource freeSource = sfxSources.Find(x => !x.isPlaying);
-            if (freeSource == null) freeSource = sfxSources[0]; // Nutze erste, falls alle voll
+
+            // Falls alle voll sind, nimm die erste (Notlösung)
+            if (freeSource == null) freeSource = sfxSources[0];
 
             freeSource.clip = s.clip;
             freeSource.volume = s.volume;
+            freeSource.loop = s.loop; // Nutzt die neue Loop-Einstellung
             freeSource.Play();
         }
     }
