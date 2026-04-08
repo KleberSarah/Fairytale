@@ -23,7 +23,7 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
+        if (Instance == null) { Instance = this;  }
         else { Destroy(gameObject); return; }
 
         // Musik-Quelle (für den Haupt-Track)

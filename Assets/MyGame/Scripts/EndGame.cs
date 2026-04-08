@@ -6,4 +6,9 @@ public class EndGame : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void Menu()
+    {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
 }

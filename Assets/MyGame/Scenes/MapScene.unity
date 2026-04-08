@@ -632,10 +632,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1159,8 +1159,8 @@ RectTransform:
   m_GameObject: {fileID: 1803128715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9542148, y: 0.7333205, z: 0.9542148}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1512933748}
   - {fileID: 1998160484}
@@ -1170,7 +1170,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -9, y: 2}
-  m_SizeDelta: {x: 2100, y: 1495}
+  m_SizeDelta: {x: 2004, y: 1104}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1803128717
 MonoBehaviour:
@@ -1482,7 +1482,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2117997208}
         m_TargetAssemblyTypeName: EndGame, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: Menu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
