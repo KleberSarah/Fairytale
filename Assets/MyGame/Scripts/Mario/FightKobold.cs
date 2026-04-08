@@ -38,6 +38,9 @@ public class FightKobold : MonoBehaviour
         // 1. Objekt erzeugen an der Position der Fee
         GameObject projectile = Instantiate(attackObject, fairyTransform.position, Quaternion.identity);
 
+
+        AudioManager.Instance.Play("Spell");
+
         // 2. Objekt zum Kobold bewegen
         while (Vector3.Distance(projectile.transform.position, koboldTransform.position) > 0.2f)
         {
@@ -66,6 +69,7 @@ public class FightKobold : MonoBehaviour
             Debug.Log("Kobold besiegt!");
             loseWinText.gameObject.SetActive(true);
             loseWinText.text = "Du hast gewonnen!";
+             yield return new WaitForSeconds(2f);
             levelFinisher.CompleteLevel();
         }
         else
@@ -73,6 +77,7 @@ public class FightKobold : MonoBehaviour
             Debug.Log("Kobold hat noch Leben übrig: " + lifeSlider.value);
             loseWinText.gameObject.SetActive(true);
             loseWinText.text = "Du hast verloren!";
+             yield return new WaitForSeconds(2f);
             levelFinisher.ReloadLevel();
         }
     }
